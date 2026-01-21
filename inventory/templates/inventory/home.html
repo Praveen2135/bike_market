@@ -1,0 +1,67 @@
+{% extends 'inventory/base.html' %}
+
+{% block hero %}
+<section class="text-light" style="background:#0f172a;">
+    <div class="container py-5">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <span class="badge bg-danger mb-3">Second-Hand Bikes</span>
+                <h1 class="fw-bold">Premium Used Bikes</h1>
+                <p class="text-secondary">
+                    Verified bikes. Trusted sellers. Transparent pricing.
+                </p>
+            </div>
+            <div class="col-md-6 text-center">
+                {% if bikes.first.images.first %}
+                    <img src="{{ bikes.first.images.first.image.url }}"
+                         class="img-fluid rounded shadow">
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block content %}
+
+<h3 class="fw-bold mb-4">Featured Bikes</h3>
+
+<div class="row">
+{% for bike in bikes %}
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 shadow-sm position-relative">
+
+            {% if not bike.is_available %}
+                <span class="badge bg-danger position-absolute top-0 start-0 m-2">
+                    SOLD
+                </span>
+            {% endif %}
+
+            {% if bike.images.first %}
+                <img src="{{ bike.images.first.image.url }}"
+                     class="card-img-top"
+                     style="height:220px; object-fit:cover;">
+            {% endif %}
+
+            <div class="card-body">
+                <h5 class="card-title fw-semibold">
+                    {{ bike.brand }} {{ bike.model_name }}
+                </h5>
+                <p class="text-muted small">
+                    {{ bike.year }} • {{ bike.kms_driven }} km
+                </p>
+                <h6 class="text-danger fw-bold">₹ {{ bike.price }}</h6>
+            </div>
+
+            <div class="card-footer bg-white border-0">
+                <a href="{% url 'bike_detail' bike.id %}"
+                   class="btn btn-dark w-100">
+                    View Details
+                </a>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+</div>
+
+{% endblock %}
